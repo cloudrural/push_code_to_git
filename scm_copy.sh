@@ -12,7 +12,7 @@ exit_abnormal() {
   exit 1
 }
 
-while getopts ":j:s:b:g:c:" options; do
+while getopts ":j:s:b:g:c:p:" options; do
 
   case "${options}" in 
     j)
@@ -30,6 +30,9 @@ while getopts ":j:s:b:g:c:" options; do
     c)
       COMMIT_MSG=${OPTARG}
       ;;
+    p)
+      PROJECT=${OPTARG}
+      ;;
     :)
       echo "Error: -${OPTARG} requires an argument."
       exit_abnormal
@@ -41,7 +44,7 @@ while getopts ":j:s:b:g:c:" options; do
 done
 
 _main_func_ () {
-    REPO_NAME=$(echo "$GIT_REPO" | sed 's|git@github.com:cloudrural/||;s/.git//')
+    REPO_NAME=$(echo "$GIT_REPO" | sed 's|ssh://git@odyssey.rowini.net:7999:/$PROJECT/||;s/.git//')
     COMMIT_ID="$JIRA_ID: $COMMIT_MSG-$(date +%F%T)"
     if [ -d "tmp" ]; then 
        rm -Rf tmp;
